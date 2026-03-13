@@ -70,13 +70,13 @@ TREINOS = {
         {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=G_9vT1Pmzkk"}
     ],
     "TREINO B: PUSH A (PEITO/OMBRO)": [
-        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=0G2_XV7slIs"},
-        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=l_i9I-Y8r1U"},
-        {"ex": "Desenv. Máquina", "sets": ["25kg", "30kg", "35kg"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=WvLMauqrnK8"},
-        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
-        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=3VkKa2kn07w"},
-        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=Yid37u14vH0"},
-        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"}
+        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=Ky_JXqloq0w"},
+        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=a56lnqizt-A"},
+        {"ex": "Desenv. Máquina", "sets": ["25kg", "30kg", "35kg"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=cAwjHUklmig"},
+        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=vpHr5eIvEUE"},
+        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=IwWvZ0rlNXs"},
+        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=re-ILvqD1RE&t=8s"},
+        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=PlQOxSm_ZWI"}
     ],
     "TREINO C: PULL A (COSTAS/BÍCEPS)": [
         {"ex": "Puxada Alta Aberta", "sets": ["55kg", "70kg", "77kg", "84kg"], "bio": "Puxe pelo cotovelo.", "vid": "https://www.youtube.com/watch?v=H75im9fAUMc"},
@@ -179,6 +179,7 @@ else:
     if st.button("Sair"):
         st.session_state.logado = False
         st.rerun()
+
 
 
 
