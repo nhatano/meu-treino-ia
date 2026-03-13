@@ -6,7 +6,7 @@ from datetime import datetime
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Lindos Shape Pro", layout="wide", page_icon="⚡")
 
-# --- DESIGN PREMIUM E RESPONSIVO (CSS OTIMIZADO) ---
+# --- DESIGN MOBILE-FIRST LINDOS SHAPE ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
@@ -17,43 +17,45 @@ st.markdown("""
         color: #f8fafc; 
     }
 
-    /* Ajuste para Cards no Celular */
+    /* Card de Exercício - Estilo Moderno */
     .exercise-card { 
         background: rgba(30, 41, 59, 0.4); 
         backdrop-filter: blur(16px); 
         border: 1px solid rgba(255, 255, 255, 0.05); 
         border-radius: 1.2rem; 
-        padding: 1.5rem; 
+        padding: 1.2rem; 
         margin-bottom: 1rem; 
         border-left: 6px solid #0f49bd; 
     }
 
-    /* Títulos mais legíveis */
-    h3 { font-size: 1.4rem !important; margin-bottom: 0.5rem !important; }
-    p { font-size: 0.9rem !important; color: #94a3b8; }
-
-    /* Inputs e Botões GIGANTES para o dedo não errar */
+    /* Botões Grandes para facilitar o toque no celular */
     .stButton>button { 
-        background: #0f49bd; 
-        color: white; 
-        border-radius: 0.8rem; 
-        font-weight: 800; 
-        height: 3.5rem; 
-        width: 100%; 
+        background: #0f49bd !important; 
+        color: white !important; 
+        border-radius: 0.8rem !important; 
+        font-weight: 800 !important; 
+        height: 3.5rem !important; 
+        width: 100% !important; 
         font-size: 1.1rem !important;
-        margin-top: 10px;
+        border: none !important;
     }
     
+    /* Campos de input mais altos */
     input { 
-        height: 3rem !important; 
-        font-size: 1rem !important; 
+        height: 3.5rem !important; 
         background-color: #0f172a !important; 
         color: white !important; 
-        border: 1px solid #334155 !important; 
+        border: 1px solid #334155 !important;
+        font-size: 1.1rem !important;
     }
 
-    /* Esconder o menu lateral no mobile por padrão para ganhar espaço */
-    [data-testid="stSidebar"] { background-color: #020617; }
+    /* Estilo do Título Principal */
+    .main-title {
+        text-align: center;
+        color: #f8fafc;
+        font-weight: 800;
+        margin-bottom: 2rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -62,7 +64,7 @@ MEU_EMAIL = "nhatano@gmail.com"
 SAYRA_EMAIL = "sayradan@gmail.com"
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937zLk95BQ654KSLGzwO6TxayA/formResponse"
 
-# --- BANCO DE DADOS DE TREINOS (A AO F) ---
+# --- BANCO DE DATOS (A-F) ---
 TREINOS = {
     "TREINO A: LEGS A (QUADRÍCEPS)": [
         {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
@@ -77,7 +79,7 @@ TREINOS = {
         {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=0G2_XV7slIs"},
         {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=l_i9I-Y8r1U"},
         {"ex": "Desenv. Máquina", "sets": ["25kg/l", "30kg/l", "35kg/l"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=WvLMauqrnK8"},
-        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague o centro.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
+        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
         {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=3VkKa2kn07w"},
         {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=Yid37u14vH0"},
         {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"}
@@ -89,7 +91,7 @@ TREINOS = {
         {"ex": "Pulldown Barra/Corda", "sets": ["30kg", "35kg", "35kg"], "bio": "Braços quase retos.", "vid": "https://www.youtube.com/watch?v=8uS_w8_1I_M"},
         {"ex": "Crucifixo Inverso Máquina", "sets": ["33kg", "40kg", "40kg"], "bio": "Deltoide posterior.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
         {"ex": "Rosca Martelo", "sets": ["15kg", "16kg", "18kg"], "bio": "Pegada neutra.", "vid": "https://www.youtube.com/watch?v=zS9_3mE9L6o"},
-        {"ex": "Rosca Direta Barra W", "sets": ["35kg", "35kg", "30kg"], "bio": "Cotovelo fixo.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
+        {"ex": "Rosca Direta Barra W", "sets": ["35kg", "35kg", "30kg"], "bio": "Mantenha cotovelo fixo.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
         {"ex": "Flexão de Punho", "sets": ["14kg", "15kg", "16kg"], "bio": "Carga moderada.", "vid": "https://www.youtube.com/watch?v=M_33zK08Nls"},
         {"ex": "Abdominal na Polia", "sets": ["25kg", "27,5kg", "30kg"], "bio": "Enrole a coluna.", "vid": "https://www.youtube.com/watch?v=2D7N_fU7Usc"}
     ],
@@ -124,50 +126,64 @@ TREINOS = {
     ]
 }
 
-# --- INTERFACE ---
-with st.sidebar:
-    st.markdown("### ⚡ Lindos Shape")
-    user_email = st.text_input("Identidade (E-mail)", placeholder="seu@email.com").lower().strip()
-    if user_email in [MEU_EMAIL, SAYRA_EMAIL]:
-        dia_selecionado = st.selectbox("Escolha o Treino", list(TREINOS.keys()))
-    btn_login = st.button("Carregar Sistema")
+# --- ESTADO INICIAL ---
+if 'logado' not in st.session_state:
+    st.session_state.logado = False
 
-if user_email in [MEU_EMAIL, SAYRA_EMAIL]:
-    u_name = "Nilson" if user_email == MEU_EMAIL else "Olá Princess Fitness"
-    u_initials = "NH" if user_email == MEU_EMAIL else "SF"
+# --- TELA DE LOGIN CENTRALIZADA ---
+if not st.session_state.logado:
+    st.markdown("<h1 class='main-title'>⚡ Lindos Shape Pro</h1>", unsafe_allow_html=True)
+    with st.container():
+        email_login = st.text_input("Digite seu e-mail para acessar", placeholder="exemplo@gmail.com").lower().strip()
+        if st.button("Acessar Sistema"):
+            if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
+                st.session_state.logado = True
+                st.session_state.email = email_login
+                st.rerun()
+            else:
+                st.error("E-mail não autorizado.")
+
+# --- APP PRINCIPAL (PÓS LOGIN) ---
+else:
+    email = st.session_state.email
+    u_name = "Nilson" if email == MEU_EMAIL else "Olá Princess Fitness"
+    u_initials = "NH" if email == MEU_EMAIL else "SF"
     
-    st.markdown(f"**{u_name}** • {dia_selecionado}")
+    # Header com Avatar e Seletor
+    st.markdown(f"### Bem-vindo, {u_name}!")
+    dia = st.selectbox("Escolha seu Treino de hoje", list(TREINOS.keys()))
+    
+    st.divider()
 
-    for item in TREINOS[dia_selecionado]:
+    for item in TREINOS[dia]:
         with st.container():
             st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
-            
-            # NO MOBILE: VÍDEO PRIMEIRO (LARGURA TOTAL)
             st.video(item['vid'])
             
-            # DEPOIS OS CAMPOS (STACKED NO CELULAR)
+            # Séries empilhadas para mobile
             for i, meta in enumerate(item['sets']):
                 st.write(f"**Série {i+1}**")
                 c1, c2, c3 = st.columns([1, 1, 1])
-                c1.text_input("Alvo", value=meta, key=f"t_{item['ex']}_{i}_{dia_selecionado}")
-                c2.number_input("Peso", key=f"w_{item['ex']}_{i}_{dia_selecionado}", min_value=0)
-                c3.selectbox("RPE", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}_{dia_selecionado}")
+                c1.text_input("Alvo", value=meta, key=f"t_{item['ex']}_{i}_{dia}")
+                c2.number_input("Peso", key=f"w_{item['ex']}_{i}_{dia}", min_value=0)
+                c3.selectbox("RPE", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}_{dia}")
             
-            if st.button(f"Salvar {item['ex']}", key=f"btn_{item['ex']}_{dia_selecionado}"):
+            if st.button(f"Salvar {item['ex']}", key=f"btn_{item['ex']}_{dia}"):
                 try:
                     for i in range(len(item['sets'])):
                         payload = {
-                            'entry.2096362736': user_email,
+                            'entry.2096362736': email,
                             'entry.201460740': item['ex'],
                             'entry.46463683': i + 1,
-                            'entry.687657200': st.session_state[f"t_{item['ex']}_{i}_{dia_selecionado}"],
-                            'entry.906726937': st.session_state[f"w_{item['ex']}_{i}_{dia_selecionado}"],
-                            'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia_selecionado}"]
+                            'entry.687657200': st.session_state[f"t_{item['ex']}_{i}_{dia}"],
+                            'entry.906726937': st.session_state[f"w_{item['ex']}_{i}_{dia}"],
+                            'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia}"]
                         }
                         requests.post(FORM_URL, data=payload)
-                    st.success("Salvo!")
-                    st.balloons()
-                except Exception as e:
-                    st.error(f"Erro: {e}")
-else:
-    st.info("👋 Digite seu e-mail para começar.")
+                    st.success("Salvo com sucesso!")
+                except:
+                    st.error("Erro ao salvar.")
+
+    if st.button("Sair do Sistema"):
+        st.session_state.logado = False
+        st.rerun()
