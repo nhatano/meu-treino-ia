@@ -5,70 +5,77 @@ import google.generativeai as genai
 from datetime import datetime
 
 # --- CONFIGURAÇÃO ---
-st.set_page_config(page_title="GynAI Evolution Multi-User", layout="wide")
+st.set_page_config(page_title="GynAI Evolution - Family Edition", layout="wide")
 
 # --- CONEXÕES ---
-conn = st.connection("gsheets", type=GSheetsConnection)
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-model = genai.GenerativeModel('gemini-pro')
+try:
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    model = genai.GenerativeModel('gemini-pro')
+except:
+    st.error("Erro nas conexões. Verifique as Secrets.")
 
-# --- BANCO DE DADOS DE TREINOS (FIXO NO CÓDIGO) ---
-# Aqui separamos por e-mail para não haver confusão
-BANCO_TREINOS = {
-    "seu_email@gmail.com": {
-        "Segunda: Legs A": [
-            {"ex": "Agachamento Hack", "series": [{"label": "Série 1", "meta": "120kg"}, {"label": "Série 2", "meta": "140kg"}], "vid": "URL_AQUI"},
-            {"ex": "Leg Press 45º", "series": [{"label": "Série 1", "meta": "220kg"}, {"label": "Série 2", "meta": "285kg"}], "vid": "URL_AQUI"}
+# --- BANCO DE DADOS DE TREINOS ---
+# Substitua 'seu_email@gmail.com' pelo seu e-mail real
+MEU_EMAIL = "seu_email@gmail.com" 
+EMAIL_SAYRA = "sayradan@gmail.com"
+
+TREINOS_DADOS = {
+    MEU_EMAIL: {
+        "Segunda: Legs A (Quadríceps)": [
+            {"ex": "Agachamento Hack", "series": [{"l": "Série 1", "m": "70kg"}, {"l": "Série 2", "m": "100kg"}, {"l": "Série 3", "m": "120kg"}, {"l": "Série 4", "m": "140kg"}], "v": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
+            {"ex": "Leg Press 45º", "series": [{"l": "Série 1", "m": "220kg"}, {"l": "Série 2", "m": "235kg"}, {"l": "Série 3", "m": "285kg"}], "v": "https://www.youtube.com/watch?v=yZmx_7igYyU"}
+        ],
+        "Terça: Push A (Peito/Ombro)": [
+            {"ex": "Supino Inc. Halteres", "series": [{"l": "Série 1", "m": "25kg"}, {"l": "Série 2", "m": "27,5kg"}, {"l": "Série 3", "m": "32,5kg"}], "v": "https://www.youtube.com/watch?v=8iP9S706yLw"}
         ]
     },
-    "email_esposa@gmail.com": {
-        "Segunda: Legs B": [
-            {"ex": "Elevação Pélvica", "series": [{"label": "Série 1", "meta": "40kg"}, {"label": "Série 2", "meta": "60kg"}], "vid": "URL_AQUI"},
-            {"ex": "Cadeira Abdutora", "series": [{"label": "Série 1", "meta": "50kg"}], "vid": "URL_AQUI"}
+    EMAIL_SAYRA: {
+        "Segunda: Legs A (Quadríceps)": [
+            {"ex": "Agachamento Hack", "series": [{"l": "Série 1", "m": "A definir"}, {"l": "Série 2", "m": "A definir"}], "v": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
+            {"ex": "Leg Press 45º", "series": [{"l": "Série 1", "m": "A definir"}], "v": "https://www.youtube.com/watch?v=yZmx_7igYyU"}
         ]
     }
 }
 
 # --- INTERFACE ---
 st.sidebar.title("⚡ GynAI Evolution")
-user_email = st.sidebar.text_input("Seu e-mail")
+email_login = st.sidebar.text_input("Digite seu e-mail para treinar:").lower().strip()
 
-if user_email in BANCO_TREINOS:
-    nome_usuario = "VOCÊ" if user_email == "seu_email@gmail.com" else "ESPOSA"
-    st.sidebar.success(f"Logado como: {nome_usuario}")
+if email_login in [MEU_EMAIL, EMAIL_SAYRA]:
+    usuario_nome = "CAMPEÃO" if email_login == MEU_EMAIL else "SAYRA"
+    st.sidebar.success(f"Logado como: {usuario_nome}")
     
-    aba = st.sidebar.selectbox("Escolha o Treino", list(BANCO_TREINOS[user_email].keys()))
-    menu = st.sidebar.radio("Navegação", ["Treinar", "Histórico", "Coach IA"])
+    # Seletor de Treino baseado no usuário
+    treinos_disponiveis = TREINOS_DADOS[email_login]
+    aba_treino = st.sidebar.selectbox("Selecione o Treino", list(treinos_disponiveis.keys()))
+    
+    menu = st.sidebar.radio("Navegação", ["Treinar Agora", "Coach IA"])
 
-    if menu == "Treinar":
-        st.header(f"🏋️ Treino de Hoje: {aba}")
+    if menu == "Treinar Agora":
+        st.header(f"🏋️ {aba_treino}")
         
-        for item in BANCO_TREINOS[user_email][aba]:
+        for item in treinos_disponiveis[aba_treino]:
             with st.expander(f"🔥 {item['ex']}", expanded=True):
-                cargas_feitas = []
-                for i, s in enumerate(item['series']):
-                    c1, c2, c3 = st.columns([2,2,2])
-                    c1.write(f"**{s['label']}** (Meta: {s['meta']})")
-                    carga_input = c2.number_input(f"Carga (kg)", key=f"in_{item['ex']}_{i}", min_value=0)
-                    cargas_feitas.append(carga_input)
+                st.video(item['v'])
+                cargas_lista = []
                 
-                if st.button(f"Salvar {item['ex']}"):
-                    # LÓGICA DE SALVAMENTO: Criar DataFrame com as séries
-                    dados_para_salvar = pd.DataFrame({
-                        "Data": [datetime.now().strftime("%d/%m/%Y")] * len(cargas_feitas),
-                        "Usuario": [user_email] * len(cargas_feitas),
-                        "Exercicio": [item['ex']] * len(cargas_feitas),
-                        "Serie": [f"Série {j+1}" for j in range(len(cargas_feitas))],
-                        "Carga": cargas_feitas
-                    })
-                    # Comando para adicionar na aba "Historico" da sua planilha
-                    # conn.create(worksheet="Historico", data=dados_para_salvar) 
-                    st.success(f"Progresso de {item['ex']} salvo no seu histórico!")
+                for i, s in enumerate(item['series']):
+                    col1, col2, col3 = st.columns([2,1,1])
+                    col1.write(f"**{s['l']}** | Meta: `{s['m']}`")
+                    c_real = col2.number_input(f"Carga Feita", key=f"{email_login}_{item['ex']}_{i}")
+                    cargas_lista.append(c_real)
+                
+                if st.button(f"Salvar {item['ex']}", key=f"btn_{item['ex']}"):
+                    # Lógica para salvar cada série individualmente
+                    # Para salvar no Sheets real, use: conn.create(worksheet="Historico", data=df)
+                    st.success(f"Treino de {item['ex']} registrado para {usuario_nome}!")
 
-    elif menu == "Histórico":
-        st.header("📊 Sua Evolução")
-        # Aqui o código filtraria a planilha: df[df['Usuario'] == user_email]
-        st.info("Aqui aparecerão seus gráficos de carga baseados no seu e-mail.")
-
+    elif menu == "Coach IA":
+        st.header("🤖 Coach Gemini")
+        duvida = st.text_input("Qual sua dúvida sobre o treino de hoje?")
+        if st.button("Analisar"):
+            res = model.generate_content(f"Usuário {usuario_nome} perguntou: {duvida}. Responda como um personal trainer.")
+            st.info(res.text)
 else:
-    st.warning("E-mail não reconhecido. Por favor, cadastre seu e-mail no código.")
+    st.warning("E-mail não autorizado. Adicione seu e-mail no código do GitHub.")
