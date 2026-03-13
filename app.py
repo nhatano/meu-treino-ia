@@ -20,7 +20,7 @@ st.markdown("""
     }
     .stButton>button { width: 100%; background: linear-gradient(90deg, #00FF41 0%, #00D136 100%); color: black; font-weight: 800; border-radius: 10px; border: none; }
     h1, h2, h3 { color: #00FF41 !important; margin-bottom: 5px; }
-    .meta-text { color: #8B949E; font-size: 0.9rem; margin-bottom: 10px; }
+    .meta-label { color: #8B949E; font-size: 0.85rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -103,7 +103,7 @@ if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
     escolha = st.sidebar.selectbox("Escolha o Dia", list(TREINOS_COMPLETOS.keys()))
     modo = st.sidebar.radio("Navegação", ["👊 Treinar Agora", "📈 Exportar Dados", "🤖 Coach IA"])
 
-   if modo == "👊 Treinar Agora":
+    if modo == "👊 Treinar Agora":
         st.header(f"{escolha}")
         for item in TREINOS_COMPLETOS[escolha]:
             with st.expander(f"🔥 {item['ex']}", expanded=False):
@@ -112,50 +112,31 @@ if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
                 with col_v: st.video(item['vid'])
                 with col_d:
                     for i, meta in enumerate(item['sets']):
-                        # Criamos 3 colunas para Alvo, Carga Real e RPE
                         c1, c2, c3 = st.columns([1.5, 1, 1])
-                        
-                        # Agora o Alvo é um text_input editável
-                        alvo_editavel = c1.text_input(
-                            f"Alvo Série {i+1}", 
-                            value=meta if email_login == MEU_EMAIL else "A definir", 
-                            key=f"alvo_{item['ex']}_{i}_{escolha}"
-                        )
-                        
-                        # Campo para a carga que você realmente usou
-                        c_real = c2.number_input(
-                            f"Fiz com (kg)", 
-                            key=f"c_{item['ex']}_{i}_{escolha}", 
-                            min_value=0
-                        )
-                        
-                        # Campo de RPE
-                        rpe = c3.selectbox(
-                            f"RPE", 
-                            list(range(1,11)), 
-                            index=7, 
-                            key=f"r_{item['ex']}_{i}_{escolha}"
-                        )
-                
+                        # CAMPO EDITÁVEL PARA CARGA ALVO
+                        c1.text_input(f"Alvo Série {i+1}", value=meta if email_login == MEU_EMAIL else "A definir", key=f"alvo_{item['ex']}_{i}_{escolha}")
+                        # CAMPO PARA REGISTRO REAL
+                        c2.number_input(f"Fiz com (kg)", key=f"c_{item['ex']}_{i}_{escolha}", min_value=0)
+                        # RPE
+                        c3.selectbox(f"RPE", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}_{escolha}")
                 if st.button(f"Salvar {item['ex']}", key=f"btn_{item['ex']}_{escolha}"):
                     st.success(f"Registro de {item['ex']} realizado!")
 
     elif modo == "📈 Exportar Dados":
-        st.header("📊 Exportação para Análise de IA")
+        st.header("📊 Exportação de Dados")
         try:
             df = conn.read(worksheet="Historico")
             user_df = df[df['Usuario'] == email_login]
             csv = user_df.to_csv(index=False).encode('utf-8')
             st.download_button("Baixar Histórico CSV", csv, "treino.csv", "text/csv")
         except:
-            st.warning("Sem dados históricos para exportar.")
+            st.warning("Sem dados históricos.")
 
     elif modo == "🤖 Coach IA":
-        st.header("🤖 Analista Gemini PRO")
-        duvida = st.text_area("Ex: 'Sugestão de carga para o Hack?'")
-        if st.button("Consultar IA"):
-            resp = model.generate_content(f"Aluno avançado {u_nome}. Dúvida: {duvida}")
+        st.header("🤖 Coach Gemini")
+        duvida = st.text_area("Dúvida técnica:")
+        if st.button("Consultar"):
+            resp = model.generate_content(f"Aluno {u_nome}. {duvida}")
             st.info(resp.text)
 else:
     st.info("👋 Digite seu e-mail e clique em 'Carregar Treino'.")
-
