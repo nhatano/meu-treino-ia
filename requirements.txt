@@ -1,3 +1,5 @@
 streamlit
 st-gsheets-connection
 google-generativeai
+plotly
+pandas
