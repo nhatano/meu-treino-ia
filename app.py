@@ -6,19 +6,48 @@ from datetime import datetime
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Lindos Shape Pro", layout="wide", page_icon="⚡")
 
-# --- FUNÇÃO MÁGICA PARA VÍDEOS (CONSERTA SHORTS) ---
-def corrigir_video(url):
-    if "shorts/" in url:
-        return url.replace("shorts/", "watch?v=").split("?")[0]
-    return url
-
 # --- DESIGN PREMIUM MOBILE-FIRST ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
     html, body, [data-testid="stAppViewContainer"] { font-family: 'Manrope', sans-serif; background-color: #020617; color: #f8fafc; }
-    .exercise-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1rem; border-left: 6px solid #0f49bd; }
-    .stButton>button { background: #0f49bd !important; color: white !important; border-radius: 0.8rem !important; font-weight: 800 !important; height: 3.5rem !important; width: 100% !important; border: none !important; }
+    
+    .exercise-card { 
+        background: rgba(30, 41, 59, 0.4); 
+        backdrop-filter: blur(16px); 
+        border: 1px solid rgba(255, 255, 255, 0.05); 
+        border-radius: 1.2rem; 
+        padding: 1.2rem; 
+        margin-bottom: 1rem; 
+        border-left: 6px solid #0f49bd; 
+    }
+
+    /* Botão de Salvar (Azul Forte) */
+    .stButton>button { 
+        background: #0f49bd !important; 
+        color: white !important; 
+        border-radius: 0.8rem !important; 
+        font-weight: 800 !important; 
+        height: 3.5rem !important; 
+        width: 100% !important; 
+        border: none !important; 
+    }
+
+    /* Botão de Vídeo (Estilo Outline Premium) */
+    .stLinkButton>a {
+        background-color: transparent !important;
+        color: #3b82f6 !important;
+        border: 2px solid #3b82f6 !important;
+        border-radius: 0.8rem !important;
+        font-weight: 700 !important;
+        height: 3rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+        margin-bottom: 15px !important;
+    }
+
     input { height: 3.5rem !important; background-color: #0f172a !important; color: white !important; border: 1px solid #334155 !important; font-size: 1.1rem !important; }
     .main-title { text-align: center; color: #f8fafc; font-weight: 800; margin-bottom: 1rem; }
 </style>
@@ -32,7 +61,7 @@ FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937z
 # --- BANCO DE DADOS DE TREINOS (A AO F) ---
 TREINOS = {
     "TREINO A: LEGS A (QUADRÍCEPS)": [
-        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0v8rKNcmMFM"},
+        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
         {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=yZmx_7igYyU"},
         {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=XzS0t_n8FjI"},
         {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=H6UoiaP9_38"},
@@ -120,9 +149,8 @@ else:
         with st.container():
             st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
             
-            # Correção automática de link de Shorts
-            link_ok = corrigir_video(item['vid'])
-            st.video(link_ok)
+            # BOTÃO DE VÍDEO NOVO (ABRE NO YOUTUBE)
+            st.link_button("🎥 Ver Execução no YouTube", item['vid'])
             
             for i, meta in enumerate(item['sets']):
                 st.write(f"**Série {i+1}**")
@@ -143,7 +171,7 @@ else:
                             'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia}"]
                         }
                         requests.post(FORM_URL, data=payload)
-                    st.success("Salvo!")
+                    st.success("Salvo com sucesso!")
                     st.balloons()
                 except:
                     st.error("Erro ao salvar.")
@@ -151,5 +179,3 @@ else:
     if st.button("Sair"):
         st.session_state.logado = False
         st.rerun()
-
-
