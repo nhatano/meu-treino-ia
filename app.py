@@ -102,29 +102,36 @@ if btn_login or user_email:
 
         tab1, tab2, tab3 = st.tabs(["TREINOS", "EVOLUÇÃO", "RANKING"])
 
-        with tab1:
-            dia = st.selectbox("Rotina Atual", list(TREINOS_COMPLETOS.keys()))
-            for item in TREINOS_COMPLETOS[dia]:
-                with st.container():
-                    st.markdown(f"""
-                        <div class="exercise-card">
-                            <span class="status-badge">Força Avançada</span>
-                            <h3 style="margin-top: 10px; font-size: 20px;">{item['ex']}</h3>
-                            <p style="font-size: 12px; color: #94a3b8;">{item['bio']}</p>
-                        </div>
-                    """, unsafe_allow_html=True)
+     # --- LÓGICA DE SALVAMENTO REAL ---
+                if st.button(f"Concluir {item['ex']}", key=f"btn_{item['ex']}_{dia}"):
+                    # Preparar os dados para enviar à planilha
+                    dados_series = []
+                    for i in range(len(item['sets'])):
+                        # Coleta os valores que você digitou nos inputs usando as chaves únicas
+                        carga_digitada = st.session_state[f"w_{item['ex']}_{i}_{dia}"]
+                        rpe_digitado = st.session_state[f"r_{item['ex']}_{i}_{dia}"]
+                        alvo_definido = st.session_state[f"t_{item['ex']}_{i}_{dia}"]
+                        
+                        dados_series.append({
+                            "Data": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                            "Usuario": user_email,
+                            "Exercicio": item['ex'],
+                            "Serie": i + 1,
+                            "Alvo": alvo_definido,
+                            "Carga": carga_digitada,
+                            "RPE": rpe_digitado
+                        })
                     
-                    c_vid, c_data = st.columns([1, 2])
-                    with c_vid: st.video(item['vid'])
-                    with c_data:
-                        for i, meta in enumerate(item['sets']):
-                            cols = st.columns([2, 1, 1])
-                            cols[0].text_input("Alvo", value=meta if user_email == MEU_EMAIL else "A definir", key=f"t_{item['ex']}_{i}_{dia}")
-                            cols[1].number_input("Carga (kg)", key=f"w_{item['ex']}_{i}_{dia}", min_value=0)
-                            cols[2].selectbox("Esforço (RPE)", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}_{dia}")
+                    # Transformar em DataFrame e enviar para o Google Sheets
+                    df_to_save = pd.DataFrame(dados_series)
                     
-                    if st.button(f"Concluir {item['ex']}", key=f"btn_{item['ex']}_{dia}"):
-                        st.toast(f"Ótimo trabalho! {item['ex']} salvo.", icon="🔥")
+                    try:
+                        # ESTE É O COMANDO QUE SALVA DE VERDADE
+                        conn.create(worksheet="Historico", data=df_to_save)
+                        st.balloons()
+                        st.success(f"Dados de {item['ex']} salvos com sucesso na nuvem!")
+                    except Exception as e:
+                        st.error(f"Erro ao salvar: {e}. Verifique se a aba 'Historico' existe.")
 
         with tab2:
             st.markdown("### 🤖 Coach Inteligente Gemini")
@@ -136,3 +143,4 @@ if btn_login or user_email:
 
     else:
         st.warning("Por favor, verifique seu e-mail de acesso.")
+
