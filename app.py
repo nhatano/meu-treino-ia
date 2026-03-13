@@ -64,10 +64,10 @@ TREINOS = {
         {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0v8rKNcmMFM"},
         {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=adPY6cd4h58"},
         {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=Wf602gn_9zU"},
-        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=H6UoiaP9_38"},
-        {"ex": "Afundo com Halteres", "sets": ["17,5kg", "20kg", "20kg"], "bio": "Tronco à frente.", "vid": "https://www.youtube.com/watch?v=QOVaHwm-Q6U"},
-        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://www.youtube.com/watch?v=q_K2eW7mUqI"},
-        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=2D7N_fU7Usc"}
+        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=el3oHblB5DM"},
+        {"ex": "Afundo com Halteres", "sets": ["17,5kg", "20kg", "20kg"], "bio": "Tronco à frente.", "vid": "https://www.youtube.com/watch?v=r04UVVW4X2k"},
+        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://www.youtube.com/watch?v=wCXvfH_-BLg"},
+        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=G_9vT1Pmzkk"}
     ],
     "TREINO B: PUSH A (PEITO/OMBRO)": [
         {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=0G2_XV7slIs"},
@@ -179,5 +179,6 @@ else:
     if st.button("Sair"):
         st.session_state.logado = False
         st.rerun()
+
 
 
