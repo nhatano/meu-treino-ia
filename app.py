@@ -14,23 +14,28 @@ st.markdown("""
     .exercise-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; padding: 24px; margin-bottom: 20px; border-left: 5px solid #0f49bd; }
     .status-badge { background: rgba(15, 73, 189, 0.2); color: #3b82f6; padding: 4px 12px; border-radius: 9999px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
     .stButton>button { background: #0f49bd; color: white; border-radius: 0.75rem; font-weight: 800; height: 3rem; width: 100%; border: none; }
-    input { background-color: #0f172a !important; color: white !important; }
+    input { background-color: #0f172a !important; color: white !important; border: 1px solid #334155 !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # --- CONFIGURAÇÕES ---
 MEU_EMAIL = "nhatano@gmail.com"
 SAYRA_EMAIL = "sayradan@gmail.com"
-
-# LINK DE RESPOSTA DO FORMULÁRIO (Ajustado para envio)
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937zLk95BQ654KSLGzwO6TxayA/formResponse"
 
-# Dicionário de exercícios (Resumido para o exemplo, use o completo que já temos)
+# --- TREINOS COMPLETOS ---
 TREINOS = {
     "TREINO 1: LEGS A (QUADRÍCEPS)": [
         {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
-        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=yZmx_7igYyU"}
+        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=yZmx_7igYyU"},
+        {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=4IStG89y8i4"},
+        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=m0FOpMEgero"}
+    ],
+    "TREINO 2: PUSH A (PEITO/OMBRO)": [
+        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=8iP9S706yLw"},
+        {"ex": "Chest Press Articulado", "sets": ["35kg/l", "40kg/l", "Drop"], "bio": "Altura mamilo.", "vid": "https://www.youtube.com/watch?v=l_i9I-Y8r1U"}
     ]
+    # Nilson, você pode continuar adicionando os outros aqui conforme o padrão!
 }
 
 # --- INTERFACE ---
@@ -57,15 +62,23 @@ if user_email in [MEU_EMAIL, SAYRA_EMAIL]:
                     rpe = cols[2].selectbox("RPE", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}")
             
             if st.button(f"Salvar {item['ex']}", key=f"btn_{item['ex']}"):
-                # Aqui o app tenta enviar os dados para o formulário
-                # Nota: Em sistemas reais, precisamos dos 'entry.ID' específicos do Google
-                # Como medida imediata para você não travar, o app confirmará o treino:
-                st.balloons()
-                st.success(f"Treino de {item['ex']} registrado com sucesso!")
-                
-                # Exemplo de como o envio funcionaria (precisa dos IDs corretos das perguntas):
-                # payload = {'entry.12345': user_email, 'entry.67890': item['ex']...}
-                # requests.post(FORM_URL, data=payload)
+                try:
+                    # Envia cada série individualmente para o formulário
+                    for i in range(len(item['sets'])):
+                        payload = {
+                            'entry.2096362736': user_email,
+                            'entry.201460740': item['ex'],
+                            'entry.46463683': i + 1,
+                            'entry.687657200': st.session_state[f"t_{item['ex']}_{i}"],
+                            'entry.906726937': st.session_state[f"w_{item['ex']}_{i}"],
+                            'entry.413423792': st.session_state[f"r_{item['ex']}_{i}"]
+                        }
+                        requests.post(FORM_URL, data=payload)
+                    
+                    st.success(f"Excelente, {u_name}! {item['ex']} salvo na sua planilha!")
+                    st.balloons()
+                except Exception as e:
+                    st.error(f"Erro ao salvar: {e}")
 
 else:
     st.info("👋 Digite seu e-mail para carregar seu treino.")
