@@ -19,7 +19,7 @@ st.markdown("""
         box-shadow: 0px 4px 15px rgba(0,0,0,0.5);
     }
     .stButton>button { width: 100%; background: linear-gradient(90deg, #00FF41 0%, #00D136 100%); color: black; font-weight: 800; border-radius: 10px; border: none; }
-    h1, h2, h3 { color: #00FF41 !important; margin-bottom: 0px; }
+    h1, h2, h3 { color: #00FF41 !important; margin-bottom: 5px; }
     .meta-text { color: #8B949E; font-size: 0.9rem; margin-bottom: 10px; }
 </style>
 """, unsafe_allow_html=True)
