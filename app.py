@@ -3,6 +3,23 @@ import pandas as pd
 import requests
 from datetime import datetime
 
+# 1. Adicione esta função logo após os imports (no início do arquivo)
+def consertar_link_youtube(url):
+    if "shorts/" in url:
+        return url.replace("shorts/", "watch?v=").split("?")[0]
+    return url
+
+# 2. Agora, dentro do seu código, onde o vídeo é exibido, use assim:
+for item in TREINOS[dia]:
+    with st.container():
+        st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
+        
+        # AQUI ESTÁ A CORREÇÃO:
+        link_corrigido = consertar_link_youtube(item['vid'])
+        st.video(link_corrigido)
+        
+        # ... resto do código (campos de peso, rpe, etc)
+
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Lindos Shape Pro", layout="wide", page_icon="⚡")
 
@@ -187,5 +204,6 @@ else:
     if st.button("Sair do Sistema"):
         st.session_state.logado = False
         st.rerun()
+
 
 
