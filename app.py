@@ -23,7 +23,7 @@ MEU_EMAIL = "nhatano@gmail.com"
 SAYRA_EMAIL = "sayradan@gmail.com"
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937zLk95BQ654KSLGzwO6TxayA/formResponse"
 
-# --- BANCO DE DADOS DE TREINOS AUDITADO (VÍDEOS NOVOS) ---
+# --- BANCO DE DADOS DE TREINOS AUDITADO (A AO F) ---
 TREINOS = {
     "TREINO A: LEGS A (QUADRÍCEPS)": [
         {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
@@ -70,8 +70,18 @@ TREINOS = {
         {"ex": "Crucifixo Inverso Máquina", "sets": ["33kg", "40kg", "40kg"], "bio": "Deltoide post.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
         {"ex": "Elevação Frontal Anilha", "sets": ["12,5kg", "15kg", "15kg"], "bio": "Até os olhos.", "vid": "https://www.youtube.com/watch?v=xS9v3_S1XnE"},
         {"ex": "Tríceps Pulley Reta", "sets": ["25kg", "30kg", "35kg"], "bio": "Punho firme.", "vid": "https://www.youtube.com/watch?v=2-LAMcpz_OQ"},
-        {"ex": "Tríceps Francês Polia (Méd/Baix)", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Extensão total.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"},
+        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Extensão total.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"},
         {"ex": "Abdominal Crunch", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Carga alta.", "vid": "https://www.youtube.com/watch?v=2D7N_fU7Usc"}
+    ],
+    "TREINO F: PULL B (COSTAS ESPESSURA/BÍCEPS)": [
+        {"ex": "Remada Curvada com Barra", "sets": ["Set 1", "Set 2", "Set 3", "Set 4"], "bio": "Tronco paralelo ao chão.", "vid": "https://www.youtube.com/watch?v=68T080S09Wk"},
+        {"ex": "Remada Cavalinho", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Cotovelos rente ao corpo.", "vid": "https://www.youtube.com/watch?v=FmS_XzIByK4"},
+        {"ex": "Puxada Triângulo", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Foco no latíssimo baixo.", "vid": "https://www.youtube.com/watch?v=lJ7x8S_3uMA"},
+        {"ex": "Puxada Unilateral Máquina", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Conexão mente-músculo.", "vid": "https://www.youtube.com/watch?v=fM5K60p4S8A"},
+        {"ex": "Encolhimento Halteres", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Foco no trapézio.", "vid": "https://www.youtube.com/watch?v=mE9n-W7S8Yg"},
+        {"ex": "Rosca Inclinada Halteres", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Alongamento máximo do bíceps.", "vid": "https://www.youtube.com/watch?v=K3S2G_9vS0I"},
+        {"ex": "Rosca Scott Máquina", "sets": ["Set 1", "Set 2", "Set 3"], "bio": "Isolamento total.", "vid": "https://www.youtube.com/watch?v=f_Vp_7i0N_E"},
+        {"ex": "Prancha Abdominal", "sets": ["1 min", "1 min", "1 min"], "bio": "Estabilização total.", "vid": "https://www.youtube.com/watch?v=pSHjTRCQxIw"}
     ]
 }
 
@@ -122,9 +132,9 @@ if user_email in [MEU_EMAIL, SAYRA_EMAIL]:
                             'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia_selecionado}"]
                         }
                         requests.post(FORM_URL, data=payload)
-                    st.success(f"{item['ex']} registrado na planilha!")
+                    st.success(f"{item['ex']} registado com sucesso!")
                     st.balloons()
                 except Exception as e:
                     st.error(f"Erro ao salvar: {e}")
 else:
-    st.info("👋 Digite seu e-mail para carregar seu treino.")
+    st.info("👋 Digite o seu e-mail para carregar o seu treino.")
