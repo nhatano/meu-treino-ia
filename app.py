@@ -6,20 +6,39 @@ from datetime import datetime
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Lindos Shape Pro", layout="wide", page_icon="⚡")
 
-# --- DESIGN PREMIUM MOBILE-FIRST ---
+# --- DESIGN PREMIUM LINDOS SHAPE (FOCO EM LEGIBILIDADE MÁXIMA) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
-    html, body, [data-testid="stAppViewContainer"] { font-family: 'Manrope', sans-serif; background-color: #020617; color: #f8fafc; }
     
+    html, body, [data-testid="stAppViewContainer"] { 
+        font-family: 'Manrope', sans-serif; 
+        background-color: #020617; 
+        color: #ffffff; /* Branco Puro */
+    }
+
+    /* Títulos e Textos Gerais em Branco Negrito */
+    h1, h2, h3, p, span, label, .stMarkdown {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+
+    /* Ajuste nos Rótulos dos Inputs (Alvo, Peso, etc) */
+    .stWidgetLabel p {
+        font-size: 1.1rem !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+
+    /* Card de Exercício */
     .exercise-card { 
-        background: rgba(30, 41, 59, 0.4); 
-        backdrop-filter: blur(16px); 
-        border: 1px solid rgba(255, 255, 255, 0.05); 
+        background: rgba(30, 41, 59, 0.6); 
+        backdrop-filter: blur(20px); 
+        border: 1px solid rgba(255, 255, 255, 0.2); 
         border-radius: 1.2rem; 
         padding: 1.2rem; 
         margin-bottom: 1rem; 
-        border-left: 6px solid #0f49bd; 
+        border-left: 8px solid #0f49bd; 
     }
 
     /* Botão de Salvar (Azul Forte) */
@@ -28,28 +47,39 @@ st.markdown("""
         color: white !important; 
         border-radius: 0.8rem !important; 
         font-weight: 800 !important; 
-        height: 3.5rem !important; 
+        height: 3.8rem !important; 
         width: 100% !important; 
-        border: none !important; 
+        border: none !important;
+        font-size: 1.2rem !important;
     }
 
-    /* Botão de Vídeo (Estilo Outline Premium) */
+    /* Botão de Vídeo YouTube */
     .stLinkButton>a {
         background-color: transparent !important;
-        color: #3b82f6 !important;
-        border: 2px solid #3b82f6 !important;
+        color: #ffffff !important;
+        border: 3px solid #3b82f6 !important;
         border-radius: 0.8rem !important;
-        font-weight: 700 !important;
-        height: 3rem !important;
+        font-weight: 800 !important;
+        height: 3.5rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-decoration: none !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 20px !important;
+        font-size: 1.1rem !important;
     }
 
-    input { height: 3.5rem !important; background-color: #0f172a !important; color: white !important; border: 1px solid #334155 !important; font-size: 1.1rem !important; }
-    .main-title { text-align: center; color: #f8fafc; font-weight: 800; margin-bottom: 1rem; }
+    /* Inputs (Onde você digita) */
+    input { 
+        height: 3.8rem !important; 
+        background-color: #000000 !important; 
+        color: #ffffff !important; 
+        border: 2px solid #ffffff !important; 
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+    }
+
+    .main-title { text-align: center; color: #ffffff; font-weight: 800; margin-bottom: 1rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -61,22 +91,22 @@ FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937z
 # --- BANCO DE DADOS DE TREINOS (A AO F) ---
 TREINOS = {
     "TREINO A: LEGS A (QUADRÍCEPS)": [
-        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0v8rKNcmMFM"},
-        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=adPY6cd4h58"},
-        {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=Wf602gn_9zU"},
-        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=el3oHblB5DM"},
-        {"ex": "Afundo com Halteres", "sets": ["17,5kg", "20kg", "20kg"], "bio": "Tronco à frente.", "vid": "https://www.youtube.com/watch?v=r04UVVW4X2k"},
-        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://www.youtube.com/watch?v=wCXvfH_-BLg"},
-        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=G_9vT1Pmzkk"}
+        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
+        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=yZmx_7igYyU"},
+        {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=XzS0t_n8FjI"},
+        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=H6UoiaP9_38"},
+        {"ex": "Afundo com Halteres", "sets": ["17,5kg", "20kg", "20kg"], "bio": "Tronco à frente.", "vid": "https://www.youtube.com/watch?v=QOVaHwm-Q6U"},
+        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://www.youtube.com/watch?v=q_K2eW7mUqI"},
+        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=2D7N_fU7Usc"}
     ],
     "TREINO B: PUSH A (PEITO/OMBRO)": [
-        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=Ky_JXqloq0w"},
-        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=a56lnqizt-A"},
-        {"ex": "Desenv. Máquina", "sets": ["25kg", "30kg", "35kg"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=cAwjHUklmig"},
-        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=vpHr5eIvEUE"},
-        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=IwWvZ0rlNXs"},
-        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=re-ILvqD1RE&t=8s"},
-        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=PlQOxSm_ZWI"}
+        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=0G2_XV7slIs"},
+        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=l_i9I-Y8r1U"},
+        {"ex": "Desenv. Máquina", "sets": ["25kg", "30kg", "35kg"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=WvLMauqrnK8"},
+        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
+        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=3VkKa2kn07w"},
+        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=Yid37u14vH0"},
+        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"}
     ],
     "TREINO C: PULL A (COSTAS/BÍCEPS)": [
         {"ex": "Puxada Alta Aberta", "sets": ["55kg", "70kg", "77kg", "84kg"], "bio": "Puxe pelo cotovelo.", "vid": "https://www.youtube.com/watch?v=H75im9fAUMc"},
@@ -149,12 +179,12 @@ else:
         with st.container():
             st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
             
-            # BOTÃO DE VÍDEO NOVO (ABRE NO YOUTUBE)
             st.link_button("🎥 Ver Execução no YouTube", item['vid'])
             
             for i, meta in enumerate(item['sets']):
                 st.write(f"**Série {i+1}**")
                 c1, c2, c3 = st.columns([1, 1, 1])
+                # Labels e textos internos agora em branco bold via CSS
                 c1.text_input("Alvo", value=meta, key=f"t_{item['ex']}_{i}_{dia}")
                 c2.number_input("Peso", key=f"w_{item['ex']}_{i}_{dia}", min_value=0)
                 c3.selectbox("RPE", list(range(1,11)), index=7, key=f"r_{item['ex']}_{i}_{dia}")
@@ -171,7 +201,7 @@ else:
                             'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia}"]
                         }
                         requests.post(FORM_URL, data=payload)
-                    st.success("Salvo com sucesso!")
+                    st.success("Salvo!")
                     st.balloons()
                 except:
                     st.error("Erro ao salvar.")
@@ -179,7 +209,3 @@ else:
     if st.button("Sair"):
         st.session_state.logado = False
         st.rerun()
-
-
-
-
