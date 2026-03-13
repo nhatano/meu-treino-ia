@@ -3,3 +3,4 @@ st-gsheets-connection
 google-generativeai
 plotly
 pandas
+streamlit-gsheets-connection
