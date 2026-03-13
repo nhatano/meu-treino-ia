@@ -45,7 +45,7 @@ except:
     st.error("Configure 'GEMINI_API_KEY' e o link da planilha nas Secrets.")
 
 # --- DADOS DOS TREINOS (SEUS E DA SAYRA) ---
-MEU_EMAIL = "seu_email@gmail.com" # <--- SUBSTITUA PELO SEU
+MEU_EMAIL = "nhatano@gmail.com" # <--- SUBSTITUA PELO SEU
 SAYRA_EMAIL = "sayradan@gmail.com"
 
 # Estrutura base de exercícios (A, B, C, D, E)
@@ -115,3 +115,4 @@ if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
                 st.info(resp.text)
 else:
     st.info("👋 Por favor, digite seu e-mail para carregar seu treino personalizado.")
+
