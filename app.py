@@ -3,76 +3,25 @@ import pandas as pd
 import requests
 from datetime import datetime
 
-# 1. Adicione esta função logo após os imports (no início do arquivo)
-def consertar_link_youtube(url):
-    if "shorts/" in url:
-        return url.replace("shorts/", "watch?v=").split("?")[0]
-    return url
-
-# 2. Agora, dentro do seu código, onde o vídeo é exibido, use assim:
-for item in TREINOS[dia]:
-    with st.container():
-        st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
-        
-        # AQUI ESTÁ A CORREÇÃO:
-        link_corrigido = consertar_link_youtube(item['vid'])
-        st.video(link_corrigido)
-        
-        # ... resto do código (campos de peso, rpe, etc)
-
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Lindos Shape Pro", layout="wide", page_icon="⚡")
 
-# --- DESIGN MOBILE-FIRST LINDOS SHAPE ---
+# --- FUNÇÃO PARA CONSERTAR LINKS DE SHORTS DO YOUTUBE ---
+def consertar_link_youtube(url):
+    if "shorts/" in url:
+        # Transforma o link de Shorts em link de vídeo comum que o App entende
+        return url.replace("shorts/", "watch?v=").split("?")[0]
+    return url
+
+# --- DESIGN MOBILE-FIRST ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
-    
-    html, body, [data-testid="stAppViewContainer"] { 
-        font-family: 'Manrope', sans-serif; 
-        background-color: #020617; 
-        color: #f8fafc; 
-    }
-
-    /* Card de Exercício - Estilo Moderno */
-    .exercise-card { 
-        background: rgba(30, 41, 59, 0.4); 
-        backdrop-filter: blur(16px); 
-        border: 1px solid rgba(255, 255, 255, 0.05); 
-        border-radius: 1.2rem; 
-        padding: 1.2rem; 
-        margin-bottom: 1rem; 
-        border-left: 6px solid #0f49bd; 
-    }
-
-    /* Botões Grandes para facilitar o toque no celular */
-    .stButton>button { 
-        background: #0f49bd !important; 
-        color: white !important; 
-        border-radius: 0.8rem !important; 
-        font-weight: 800 !important; 
-        height: 3.5rem !important; 
-        width: 100% !important; 
-        font-size: 1.1rem !important;
-        border: none !important;
-    }
-    
-    /* Campos de input mais altos */
-    input { 
-        height: 3.5rem !important; 
-        background-color: #0f172a !important; 
-        color: white !important; 
-        border: 1px solid #334155 !important;
-        font-size: 1.1rem !important;
-    }
-
-    /* Estilo do Título Principal */
-    .main-title {
-        text-align: center;
-        color: #f8fafc;
-        font-weight: 800;
-        margin-bottom: 2rem;
-    }
+    html, body, [data-testid="stAppViewContainer"] { font-family: 'Manrope', sans-serif; background-color: #020617; color: #f8fafc; }
+    .exercise-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.2rem; padding: 1.2rem; margin-bottom: 1rem; border-left: 6px solid #0f49bd; }
+    .stButton>button { background: #0f49bd !important; color: white !important; border-radius: 0.8rem !important; font-weight: 800 !important; height: 3.5rem !important; width: 100% !important; font-size: 1.1rem !important; border: none !important; }
+    input { height: 3.5rem !important; background-color: #0f172a !important; color: white !important; border: 1px solid #334155 !important; font-size: 1.1rem !important; }
+    .main-title { text-align: center; color: #f8fafc; font-weight: 800; margin-bottom: 2rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,25 +30,25 @@ MEU_EMAIL = "nhatano@gmail.com"
 SAYRA_EMAIL = "sayradan@gmail.com"
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCkxNA1WEBbuDl4VA6KKmI937zLk95BQ654KSLGzwO6TxayA/formResponse"
 
-# --- BANCO DE DATOS (A-F) ---
+# --- BANCO DE DADOS DE TREINOS (A AO F) ---
 TREINOS = {
     "TREINO A: LEGS A (QUADRÍCEPS)": [
-        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://youtube.com/shorts/TA5oAKI_Nxw?si=CBzIpRloD01JeORU"},
-        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://youtube.com/shorts/lHZUF_s3q9c?si=iy0SDSCV03wjxGiB"},
-        {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://youtube.com/shorts/AmHRbGPzJ70?si=3Gf1Vqjgla_rz2rD"},
-        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://youtube.com/shorts/tcdgal1epsI?si=vZ84qLhKnoaezhAu"},
-        {"ex": "Afundo com Halteres", "sets": ["17,5kg/mão", "20kg/mão", "20kg"], "bio": "Tronco à frente.", "vid": "https://youtube.com/shorts/io3KJ3oN5mk?si=W4F_LRbSShwOsxo1"},
-        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://youtube.com/shorts/ClGPnxuKXNQ?si=cKbU6sXdd7OcwYQ0"},
-        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://youtube.com/shorts/DAgYXDuBPQA?si=44ieOuu_mJSVOThx"}
+        {"ex": "Agachamento Hack", "sets": ["70kg (15 reps)", "100kg (12 reps)", "120kg (10 reps)", "140kg (6-8 reps)"], "bio": "Pés baixos. 3s na descida.", "vid": "https://www.youtube.com/watch?v=0enGC9f_Tpg"},
+        {"ex": "Leg Press 45º", "sets": ["220kg (12 reps)", "235kg (10 reps)", "285kg (10 reps)", "Drop: 260->180->100"], "bio": "Amplitude máxima.", "vid": "https://www.youtube.com/watch?v=yZmx_7igYyU"},
+        {"ex": "Cadeira Adutora", "sets": ["95kg", "100kg", "100kg"], "bio": "3s abrir/fechar.", "vid": "https://www.youtube.com/watch?v=XzS0t_n8FjI"},
+        {"ex": "Cadeira Extensora", "sets": ["47kg", "47kg", "Drop set"], "bio": "Iso 2s no topo.", "vid": "https://www.youtube.com/watch?v=H6UoiaP9_38"},
+        {"ex": "Afundo com Halteres", "sets": ["17,5kg/mão", "20kg/mão", "20kg"], "bio": "Tronco à frente.", "vid": "https://www.youtube.com/watch?v=QOVaHwm-Q6U"},
+        {"ex": "Panturrilha no Leg", "sets": ["150kg", "150kg", "150kg"], "bio": "Alongamento máximo.", "vid": "https://www.youtube.com/watch?v=q_K2eW7mUqI"},
+        {"ex": "Abdominal Polia Média", "sets": ["1 min", "1 min", "Falha"], "bio": "Core ativado.", "vid": "https://www.youtube.com/watch?v=2D7N_fU7Usc"}
     ],
     "TREINO B: PUSH A (PEITO/OMBRO)": [
-        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/shorts/ejVSypU1E6U"},
-        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/shorts/pxZY6YVNC-w"},
-        {"ex": "Desenv. Máquina", "sets": ["25kg/l", "30kg/l", "35kg/l"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/shorts/ivmTCeUS-w8"},
-        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/shorts/E_HXDQsEHfg"},
-        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/shorts/AXyz3LONUkY"},
-        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/shorts/jsntw4tVAgQ"},
-        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/shorts/IoawExktILM"}
+        {"ex": "Supino Inclinado Halteres", "sets": ["25kg", "27,5kg", "30kg", "32,5kg"], "bio": "Banco 30º.", "vid": "https://www.youtube.com/watch?v=0G2_XV7slIs"},
+        {"ex": "Chest Press Articulado", "sets": ["35kg/lado", "40kg/lado", "Drop set"], "bio": "Alça altura mamilo.", "vid": "https://www.youtube.com/watch?v=l_i9I-Y8r1U"},
+        {"ex": "Desenv. Máquina", "sets": ["25kg/l", "30kg/l", "35kg/l"], "bio": "Punho alinhado.", "vid": "https://www.youtube.com/watch?v=WvLMauqrnK8"},
+        {"ex": "Voador Peck Deck", "sets": ["54kg", "61kg", "68kg"], "bio": "Esmague no centro.", "vid": "https://www.youtube.com/watch?v=Xp0NfT_SjG0"},
+        {"ex": "Elevação Lateral Halteres", "sets": ["15kg", "15kg", "Drop set"], "bio": "Linha do ombro.", "vid": "https://www.youtube.com/watch?v=3VkKa2kn07w"},
+        {"ex": "Tríceps Corda", "sets": ["25kg", "30kg", "Drop set"], "bio": "Abra embaixo.", "vid": "https://www.youtube.com/watch?v=Yid37u14vH0"},
+        {"ex": "Tríceps Francês Polia", "sets": ["15kg", "17,5kg", "20kg"], "bio": "Cotovelos fechados.", "vid": "https://www.youtube.com/watch?v=S_mU0G0mO-E"}
     ],
     "TREINO C: PULL A (COSTAS/BÍCEPS)": [
         {"ex": "Puxada Alta Aberta", "sets": ["55kg", "70kg", "77kg", "84kg"], "bio": "Puxe pelo cotovelo.", "vid": "https://www.youtube.com/watch?v=H75im9fAUMc"},
@@ -150,34 +99,37 @@ if 'logado' not in st.session_state:
 # --- TELA DE LOGIN CENTRALIZADA ---
 if not st.session_state.logado:
     st.markdown("<h1 class='main-title'>⚡ Lindos Shape Pro</h1>", unsafe_allow_html=True)
-    with st.container():
-        email_login = st.text_input("Digite seu e-mail para acessar", placeholder="exemplo@gmail.com").lower().strip()
-        if st.button("Acessar Sistema"):
-            if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
-                st.session_state.logado = True
-                st.session_state.email = email_login
-                st.rerun()
-            else:
-                st.error("E-mail não autorizado.")
+    email_login = st.text_input("Digite seu e-mail", placeholder="exemplo@gmail.com").lower().strip()
+    if st.button("Acessar Sistema"):
+        if email_login in [MEU_EMAIL, SAYRA_EMAIL]:
+            st.session_state.logado = True
+            st.session_state.email = email_login
+            st.rerun()
+        else:
+            st.error("Acesso negado.")
 
-# --- APP PRINCIPAL (PÓS LOGIN) ---
+# --- APP PRINCIPAL ---
 else:
     email = st.session_state.email
     u_name = "Nilson" if email == MEU_EMAIL else "Olá Princess Fitness"
-    u_initials = "NH" if email == MEU_EMAIL else "SF"
+    saudacao = "Bem-vindo, Lindo!" if email == MEU_EMAIL else "Olá, Linda!"
     
-    # Header com Avatar e Seletor
-    st.markdown(f"### Bem-vindo, {u_name}!")
-    dia = st.selectbox("Escolha seu Treino de hoje", list(TREINOS.keys()))
+    st.markdown(f"### {saudacao}")
+    
+    # O SELETOR PRECISA ESTAR AQUI PARA DEFINIR O 'DIA'
+    dia = st.selectbox("Escolha seu Treino", list(TREINOS.keys()))
     
     st.divider()
 
+    # AGORA SIM O LOOP RODA SEM ERRO
     for item in TREINOS[dia]:
         with st.container():
             st.markdown(f"""<div class="exercise-card"><h3>{item['ex']}</h3><p>{item['bio']}</p></div>""", unsafe_allow_html=True)
-            st.video(item['vid'])
             
-            # Séries empilhadas para mobile
+            # Correção automática de link de Shorts
+            link_final = consertar_link_youtube(item['vid'])
+            st.video(link_final)
+            
             for i, meta in enumerate(item['sets']):
                 st.write(f"**Série {i+1}**")
                 c1, c2, c3 = st.columns([1, 1, 1])
@@ -197,13 +149,10 @@ else:
                             'entry.413423792': st.session_state[f"r_{item['ex']}_{i}_{dia}"]
                         }
                         requests.post(FORM_URL, data=payload)
-                    st.success("Salvo com sucesso!")
+                    st.success("Salvo!")
                 except:
                     st.error("Erro ao salvar.")
 
-    if st.button("Sair do Sistema"):
+    if st.button("Sair"):
         st.session_state.logado = False
         st.rerun()
-
-
-
